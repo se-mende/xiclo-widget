@@ -42,11 +42,10 @@ function XicloLogin(props) {
   }, []);
 
   return (
-    <div style={{ border: "1px solid black", width: 350 }}>
-      <p>xiclo widget</p>
+    <div>
       {validation.isValid ? (
         <div>
-          ¿Usar Xiclo?{" "}
+          ¿Quieres usar recipientes Xiclo?{" "}
           <input
             type="checkbox"
             id="useXiclo"
