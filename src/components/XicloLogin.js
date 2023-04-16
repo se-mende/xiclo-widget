@@ -15,20 +15,19 @@ function XicloLogin(props) {
 
   const handleUseXiclo = (event) => {
     setUseXiclo(event.target.checked);
-    axiosInstance
-      .post(XICLO_GENERATE_TOKEN, {
-        userId: validation.userId,
-      })
-      .then((result) => {
-        if (event.target.checked)
+    if (event.target.checked) {
+      axiosInstance
+        .post(XICLO_GENERATE_TOKEN, {
+          userId: validation.userId,
+        })
+        .then((result) => {
           event.target
             .closest(".xiclo-widget")
             .setAttribute("data-xiclo-token", result.data.token);
-        else
-          event.target
-            .closest(".xiclo-widget")
-            .removeAttribute("data-xiclo-token");
-      });
+        });
+    } else {
+      event.target.closest(".xiclo-widget").removeAttribute("data-xiclo-token");
+    }
   };
 
   const togglePopup = () => {
