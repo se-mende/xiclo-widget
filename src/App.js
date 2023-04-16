@@ -4,7 +4,12 @@ import XicloLogin from "./components/XicloLogin";
 function App(props) {
   return (
     <div>
-      <XicloLogin email={props.email} apikey={props.apikey} />
+      <XicloLogin
+        apikey={props.apikey}
+        email={props.email}
+        phone={props.phone}
+        userid={props.userid}
+      />
     </div>
   );
 }

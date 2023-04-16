@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../index";
-import Popup from "./RegistrationForm";
+import Popup from "./DownloadDialog";
 
 const XICLO_VALIDATION = `${process.env.REACT_APP_HOST}/users/validate`;
+const XICLO_GENERATE_TOKEN = `${process.env.REACT_APP_HOST}/users/generate-token`;
 
 function XicloLogin(props) {
   const [useXiclo, setUseXiclo] = useState(false);
@@ -14,9 +15,20 @@ function XicloLogin(props) {
 
   const handleUseXiclo = (event) => {
     setUseXiclo(event.target.checked);
-    if (event.target.checked)
-      event.target.setAttribute("data-userId", validation.userId);
-    else event.target.removeAttribute("data-userId");
+    axiosInstance
+      .post(XICLO_GENERATE_TOKEN, {
+        userId: validation.userId,
+      })
+      .then((result) => {
+        if (event.target.checked)
+          event.target
+            .closest(".xiclo-widget")
+            .setAttribute("data-xiclo-token", result.data.token);
+        else
+          event.target
+            .closest(".xiclo-widget")
+            .removeAttribute("data-xiclo-token");
+      });
   };
 
   const togglePopup = () => {
@@ -31,6 +43,8 @@ function XicloLogin(props) {
       .get(XICLO_VALIDATION, {
         params: {
           email: props.email,
+          phone: props.phone,
+          userId: props.userid,
         },
       })
       .then((result) => {
@@ -56,8 +70,8 @@ function XicloLogin(props) {
         </div>
       ) : (
         <div>
-          <p>No eres usuario Xiclo</p>
-          <button onClick={() => setShowRegistration(true)}>Registrar</button>
+          ¿Te gustaría usar Xiclo?{" "}
+          <button onClick={() => setShowRegistration(true)}>Registrate</button>
         </div>
       )}
       {showRegistration && (
@@ -66,11 +80,17 @@ function XicloLogin(props) {
             <>
               <b>Registrate a Xiclo</b>
               <br></br>
-              <button>Gmail</button>
+              <p>Appstore</p>
+              <img
+                src="https://cdn.jsdelivr.net/gh/se-mende/xiclo-widget/widget/appstore.png"
+                alt="appstore"
+              ></img>
               <br></br>
-              <button>Apple</button>
-              <br></br>
-              <button>Correo</button>
+              <p>Play store</p>
+              <img
+                src="https://cdn.jsdelivr.net/gh/se-mende/xiclo-widget/widget/playstore.png"
+                alt="playstore"
+              ></img>
             </>
           }
           handleClose={togglePopup}

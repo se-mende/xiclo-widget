@@ -18,7 +18,12 @@ const widgetDivs = document.querySelectorAll(".xiclo-widget");
 widgetDivs.forEach((div) => {
   ReactDOM.render(
     <React.StrictMode>
-      <App email={div.dataset.email} apikey={div.dataset.apikey} />
+      <App
+        apikey={div.dataset.apikey}
+        email={div.dataset.email}
+        phone={div.dataset.phone}
+        userid={div.dataset.userid}
+      />
     </React.StrictMode>,
     div
   );
